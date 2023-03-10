@@ -6,6 +6,11 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  resource_group_name: rg-githubactions
+  location: "Australia East"
+  subscriptionId: a9ee9648-5a36-44cc-b898-c54cf9bc37b8
+
 jobs:
   armDeploy:
     runs-on: ubuntu-latest
@@ -18,39 +23,40 @@ jobs:
         with: 
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-      - name: Deploy Resource group rg-githubactions
+      - name: Deploy Resource group ${{ env.resource_group_name }}
         uses: Azure/arm-deploy@v1
         with:
           scope : subscription
-          subscriptionId: a9ee9648-5a36-44cc-b898-c54cf9bc37b8
+          subscriptionId: ${{ env.subscriptionId }}
           region: Australia East
           template: ./arm-templates/resourcegroup.json
           parameters:
-            location="Australia East"
-            resourceGroupName=rg-githubactions
-          deploymentName: rg-githubactions
+            location=${{ env.location }}
+            resourceGroupName=${{ env.resource_group_name }}
+          deploymentName: ${{ env.resource_group_name }}
 
       - name: Deploy Storage account
         uses: Azure/arm-deploy@v1
         id: storageAccountDeploy
         with:
           scope : resourcegroup
-          resourceGroupName: rg-githubactions
-          subscriptionId: a9ee9648-5a36-44cc-b898-c54cf9bc37b8
+          resourceGroupName: ${{ env.resource_group_name }}
+          subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/storageaccount.json
           parameters: 
             sku=Standard_LRS
             storageAccountName=globomanticsarm10071
-            location="Australia East"
+            location=${{ env.location }}
           deploymentMode: incremental
 
       - name: Deploy VM
         uses: Azure/arm-deploy@v1
         with:
           scope : resourcegroup
-          resourceGroupName: rg-githubactions
-          subscriptionId: a9ee9648-5a36-44cc-b898-c54cf9bc37b8
+          resourceGroupName: ${{ env.resource_group_name }}
+          subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/virtualmachine.json
           parameters: 
             adminPassword=${{ secrets.UBUNTU_ADMIN_PASSWORD }}
+            location=${{ env.location }}
           deploymentMode: incremental
