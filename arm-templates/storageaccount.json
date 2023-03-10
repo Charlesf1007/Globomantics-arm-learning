@@ -32,7 +32,7 @@
             "tags": {
                 "displayName": "[parameters('storageAccountName')]"
             },
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "kind": "StorageV2",
             "sku": {
                 "name": "[parameters('sku')]",
@@ -40,5 +40,10 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "BlobUri": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))).primaryEndpoint.blob]"
+        }
+    }
 }
