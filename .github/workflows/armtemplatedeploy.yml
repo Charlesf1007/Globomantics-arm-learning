@@ -35,4 +35,6 @@ jobs:
           subscriptionId: a9ee9648-5a36-44cc-b898-c54cf9bc37b8
           template: ./arm-templates/storageaccount.json
           parameters: ./arm-templates/storageaccount.parameters.json
+            storageAccountName=globomanticsarm10071
+            location="Australia East"
           deploymentMode: incremental
