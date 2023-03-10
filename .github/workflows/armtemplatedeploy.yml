@@ -8,7 +8,7 @@ on:
 
 env:
   resource_group_name: rg-githubactions
-  location: "Australia East"
+  location: Australia East
   subscriptionId: a9ee9648-5a36-44cc-b898-c54cf9bc37b8
 
 jobs:
@@ -28,10 +28,10 @@ jobs:
         with:
           scope : subscription
           subscriptionId: ${{ env.subscriptionId }}
-          region: Australia East
+          region: "${{ env.location }}"
           template: ./arm-templates/resourcegroup.json
           parameters:
-            location=${{ env.location }}
+            location="${{ env.location }}"
             resourceGroupName=${{ env.resource_group_name }}
           deploymentName: ${{ env.resource_group_name }}
 
@@ -46,7 +46,7 @@ jobs:
           parameters: 
             sku=Standard_LRS
             storageAccountName=globomanticsarm10071
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - name: Deploy VM
@@ -58,5 +58,5 @@ jobs:
           template: ./arm-templates/virtualmachine.json
           parameters: 
             adminPassword=${{ secrets.UBUNTU_ADMIN_PASSWORD }}
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
