@@ -46,7 +46,6 @@ jobs:
 
       - name: Deploy VM
         uses: Azure/arm-deploy@v1
-        id: storageAccountDeploy
         with:
           scope : resourcegroup
           resourceGroupName: rg-githubactions
